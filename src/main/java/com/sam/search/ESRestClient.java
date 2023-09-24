@@ -1,4 +1,4 @@
-package com.example.elasticsearchmaven;
+package com.sam.search;
 
 import co.elastic.clients.elasticsearch.ElasticsearchClient;
 import co.elastic.clients.json.jackson.JacksonJsonpMapper;

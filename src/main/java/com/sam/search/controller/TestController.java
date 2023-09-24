@@ -1,16 +1,15 @@
-package com.example.elasticsearchmaven;
+package com.sam.search.controller;
 
-import com.sun.xml.internal.ws.api.WSService;
+import com.sam.search.ESClientConnector;
+import com.sam.search.entity.Result;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -20,8 +19,8 @@ public class TestController {
     ESClientConnector connector;
 
     @GetMapping("/search")
-    public ResponseEntity<List<Object>> hello(@RequestParam String keyword) {
-        List<Object> result;
+    public ResponseEntity<List<Result>> hello(@RequestParam String keyword) {
+        List<Result> result;
         try {
             result = connector.fetchWithMust(keyword);
         } catch (IOException e) {
@@ -31,10 +30,21 @@ public class TestController {
     }
 
     @GetMapping("/today")
-    public ResponseEntity<List<Object>> searchToday() {
-        List<Object> result;
+    public ResponseEntity<List<Result>> searchToday() {
+        List<Result> result;
         try {
             result = connector.fetchToday();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return ResponseEntity.ok(result);
+    }
+
+    @GetMapping("/exact-search")
+    public ResponseEntity<List<Result>> searchExact(@RequestParam final String keyword) {
+        List<Result> result;
+        try {
+            result = connector.searchExact(keyword);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
